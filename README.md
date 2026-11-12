@@ -11,22 +11,58 @@ External Hubleto application for recording business and private vehicle trips.
 - an interactive OpenStreetMap route picker directly in the trip form;
 - reverse geocoding of selected points to real place names;
 - all business fields are optional, so a route can be saved before a vehicle or other details are known;
-- standard Hubleto tables, forms, date/time inputs and second sidebar navigation.
+- standard Hubleto tables, forms, date/time inputs and app navigation.
 
-The package has no frontend build step and does not require Leaflet or a Google Maps API key. It uses Hubleto's standard table, form, modal and input components. Map tiles are loaded from OpenStreetMap and reverse geocoding uses the public Nominatim service. Deployments with heavier traffic should configure their own tile/geocoding service in accordance with the providers' usage policies.
+The app uses Hubleto's built-in React components and includes its own JavaScript
+and CSS. It has no separate frontend build step and does not require Leaflet or
+a Google Maps API key.
 
 ## Installation
 
-After the package is published on Packagist:
+Requires an existing Hubleto 2 development installation with the Auth, Settings
+and Desktop apps. The Composer package currently depends on `hubleto/erp:dev-main`.
+
+After registration on Packagist, run these commands from the Hubleto project root:
 
 ```bash
 composer require wai-blue/hubleto-vehicle-log
-php hubleto app install "Hubleto\\App\\External\\WaiBlue\\VehicleLog"
+php hubleto app install 'Hubleto\App\External\WaiBlue\VehicleLog'
 ```
 
-For local development, add this repository as a Composer `path` repository in the Hubleto project's `composer.json`, require the package, and run the same Hubleto install command.
+Open **Vehicle log** in the sidebar, or visit `/vehicle-log`.
 
-The app intentionally uses the existing `vehicle_log_vehicles` and `vehicle_log_trips` table names. Installing this external version therefore keeps data created by the former enterprise implementation.
+Until Packagist registration, use a local Composer `path` repository as described
+in the [external app tutorial](https://developer.hubleto.eu/v2/tutorials/create-first-external-app).
+
+The app uses the `vehicle_log_vehicles` and `vehicle_log_trips` tables shared with
+the former enterprise version. Do not enable both versions together. Before
+switching an existing installation, back up the database and review its schema,
+app configuration and migration history; these steps describe a new installation.
+
+## Usage
+
+1. Open **Vehicle log > Vehicles** (`/vehicle-log/vehicles`) and add a vehicle.
+2. Set its propulsion type and fuel or electricity consumption where applicable.
+3. Open **Vehicle log > Trips** (`/vehicle-log`) and click **Add trip**.
+4. Select a vehicle and driver, then enter the date, times, route and purpose.
+5. Enter the odometer readings and business/private kilometres where known.
+6. Save the trip. Hubleto calculates the duration, distance and expected energy
+   consumption from the supplied values.
+
+A trip can also be saved before a vehicle or other business details are known.
+The map lets you select its start and end points and fills in their coordinates
+and place names. It does not calculate driving directions or road distance;
+distance is calculated from the odometer readings or the kilometre split.
+
+## Map Services
+
+The map needs internet access. Tiles are loaded from OpenStreetMap, and selected
+coordinates are sent to the public Nominatim service to resolve place names.
+If reverse geocoding is unavailable, the selected coordinates remain available.
+
+Use these services in accordance with the
+[OpenStreetMap tile policy](https://operations.osmfoundation.org/policies/tiles/)
+and [Nominatim usage policy](https://operations.osmfoundation.org/policies/nominatim/).
 
 ## License
 

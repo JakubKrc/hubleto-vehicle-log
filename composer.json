@@ -1,6 +1,12 @@
 {
   "name": "wai-blue/hubleto-vehicle-log",
   "description": "Vehicle logbook for Hubleto",
+  "keywords": ["hubleto", "vehicle-log", "logbook", "trips"],
+  "homepage": "https://github.com/wai-blue/hubleto-vehicle-log",
+  "support": {
+    "issues": "https://github.com/wai-blue/hubleto-vehicle-log/issues",
+    "source": "https://github.com/wai-blue/hubleto-vehicle-log"
+  },
   "license": "GPL-3.0-only",
   "type": "library",
   "require": {
