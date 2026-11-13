@@ -10,8 +10,7 @@
   "license": "GPL-3.0-only",
   "type": "library",
   "require": {
-    "php": "^8.2",
-    "hubleto/erp": "dev-main"
+    "php": "^8.2"
   },
   "autoload": {
     "psr-4": {
