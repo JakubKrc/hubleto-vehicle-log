@@ -4,6 +4,10 @@
   if (window.__hubletoVehicleLogLoaded) return;
   window.__hubletoVehicleLogLoaded = true;
 
+  function translate(text) {
+    return globalThis.hubleto?.translate(text, 'Hubleto\\App\\External\\WaiBlue\\VehicleLog\\Loader', 'Assets\\vehicle-log') ?? text;
+  }
+
   const tripSpans = {
     trip_date: 3,
     id_vehicle: 5,
@@ -67,22 +71,26 @@
     const section = document.createElement('div');
     section.className = 'vl-form-section';
     section.dataset.vlSection = beforeField;
-    section.innerHTML = '<i class="fas ' + icon + '"></i><span>' + title + '</span>';
+    const iconElement = document.createElement('i');
+    iconElement.className = 'fas ' + icon;
+    const label = document.createElement('span');
+    label.textContent = title;
+    section.append(iconElement, label);
     wrapper.insertAdjacentElement('beforebegin', section);
   }
 
   function addTripSections(body) {
-    addSection(body, 'trip_date', 'Trip details', 'fa-calendar-day');
-    addSection(body, 'route_from', 'Route and purpose', 'fa-route');
-    addSection(body, 'odometer_start_km', 'Mileage', 'fa-tachometer-alt');
-    addSection(body, 'fuel_purchased_l', 'Energy and costs', 'fa-gas-pump');
-    addSection(body, 'notes', 'Notes', 'fa-sticky-note');
+    addSection(body, 'trip_date', translate('Trip details'), 'fa-calendar-day');
+    addSection(body, 'route_from', translate('Route and purpose'), 'fa-route');
+    addSection(body, 'odometer_start_km', translate('Mileage'), 'fa-tachometer-alt');
+    addSection(body, 'fuel_purchased_l', translate('Energy and costs'), 'fa-gas-pump');
+    addSection(body, 'notes', translate('Notes'), 'fa-sticky-note');
   }
 
   function addVehicleSections(body) {
-    addSection(body, 'id_company', 'Vehicle details', 'fa-car');
-    addSection(body, 'fuel_consumption_l_per_100km', 'Consumption', 'fa-tachometer-alt');
-    addSection(body, 'initial_odometer_km', 'Opening values', 'fa-flag-checkered');
+    addSection(body, 'id_company', translate('Vehicle details'), 'fa-car');
+    addSection(body, 'fuel_consumption_l_per_100km', translate('Consumption'), 'fa-tachometer-alt');
+    addSection(body, 'initial_odometer_km', translate('Opening values'), 'fa-flag-checkered');
   }
 
   function editableElement(scope, field) {
@@ -147,12 +155,12 @@
     header.className = 'vl-route-picker__header';
     const title = document.createElement('div');
     title.className = 'vl-route-picker__title';
-    title.textContent = 'Route on map';
+    title.textContent = translate('Route on map');
     const actions = document.createElement('div');
     actions.className = 'vl-route-picker__actions';
-    const startButton = createButton('Select start', 'The next map click sets the route start', 'fa-map-marker-alt');
-    const endButton = createButton('Select end', 'The next map click sets the route end', 'fa-flag-checkered');
-    const clearButton = createButton('Clear', 'Remove both selected points', 'fa-eraser');
+    const startButton = createButton(translate('Select start'), translate('The next map click sets the route start'), 'fa-map-marker-alt');
+    const endButton = createButton(translate('Select end'), translate('The next map click sets the route end'), 'fa-flag-checkered');
+    const clearButton = createButton(translate('Clear'), translate('Remove both selected points'), 'fa-eraser');
     actions.append(startButton, endButton, clearButton);
     header.append(title, actions);
 
@@ -178,8 +186,8 @@
 
     const zoom = document.createElement('div');
     zoom.className = 'vl-route-picker__zoom';
-    const zoomIn = createButton('+', 'Zoom in');
-    const zoomOut = createButton('−', 'Zoom out');
+    const zoomIn = createButton('+', translate('Zoom in'));
+    const zoomOut = createButton('−', translate('Zoom out'));
     zoom.append(zoomIn, zoomOut);
     const attribution = document.createElement('div');
     attribution.className = 'vl-route-picker__attribution';
@@ -239,9 +247,9 @@
       startButton.classList.toggle('btn-transparent', mode !== 'start');
       endButton.classList.toggle('btn-primary', mode === 'end');
       endButton.classList.toggle('btn-transparent', mode !== 'end');
-      if (!start) status.textContent = 'Click the map to select the route start.';
-      else if (!end) status.textContent = 'Start saved. Click the map to select the route end.';
-      else status.textContent = 'Both points are selected. Drag or zoom the map, or choose which point to change.';
+      if (!start) status.textContent = translate('Click the map to select the route start.');
+      else if (!end) status.textContent = translate('Start saved. Click the map to select the route end.');
+      else status.textContent = translate('Both points are selected. Drag or zoom the map, or choose which point to change.');
     }
 
     function updateMarkers() {
