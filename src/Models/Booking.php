@@ -48,6 +48,10 @@ class Booking extends \Hubleto\Erp\Model
       ,
       'passengers' => (new Json($this, $this->translate('Passengers')))
         ->setReactComponent('InputMultipleUsers')
+        ->setInputProps([
+          'searchPlaceholder' => $this->translate('Search passengers'),
+          'emptyText' => $this->translate('No passengers'),
+        ])
       ,
       'note' => (new Text($this, $this->translate('Note')))->setDefaultVisible(),
     ]);
