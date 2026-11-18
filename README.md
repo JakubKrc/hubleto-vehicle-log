@@ -21,21 +21,25 @@ JavaScript and CSS for the trip map. It does not require Leaflet or a Google Map
 
 ## Installation
 
-Requires an existing Hubleto 2 development installation with the Auth, Settings,
-Desktop and Calendar apps. The Composer package currently depends on `hubleto/erp:dev-main`.
+Requires an existing Hubleto 2 installation with the Auth, Settings, Desktop and
+Calendar apps. See the [official Hubleto installation guide](https://github.com/hubleto/install#installation).
 
-After registration on Packagist, run these commands from the Hubleto project root:
+Install the [Packagist package](https://packagist.org/packages/wai-blue/hubleto-vehicle-log)
+using the [official external app installation procedure](https://developer.hubleto.eu/v2/apps/external).
+Run these commands from the Hubleto project root:
 
-```bash
-composer require wai-blue/hubleto-vehicle-log
-php hubleto app install 'Hubleto\App\External\WaiBlue\VehicleLog'
-npm install && npm run build
+```sh
+composer require "wai-blue/hubleto-vehicle-log:^2.0@alpha"
+php hubleto app install Hubleto/App/External/WaiBlue/VehicleLog
+npm install
+npm run build
 ```
 
-Open **Vehicle log** in the sidebar, or visit `/vehicle-log`.
+The package currently has alpha releases; `@alpha` allows these for this package.
+The frontend build includes the app's React vehicle form and bookings tab, following
+[Hubleto's frontend build instructions](https://github.com/hubleto/install#custom-development).
 
-Until Packagist registration, use a local Composer `path` repository as described
-in the [external app tutorial](https://developer.hubleto.eu/v2/tutorials/create-first-external-app).
+Open **Vehicle log** in the sidebar, or visit `/vehicle-log`.
 
 The app uses the `vehicle_log_vehicles` and `vehicle_log_trips` tables shared with
 the former enterprise version. Do not enable both versions together. Before
