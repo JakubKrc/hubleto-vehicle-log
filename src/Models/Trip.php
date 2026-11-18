@@ -194,7 +194,7 @@ class Trip extends \Hubleto\Erp\Model
     try {
       return TripCalculator::calculate($record, $vehicle, $nextSequence);
     } catch (TripCalculationException $e) {
-      throw new RecordSaveException($e->getMessage(), [[
+      throw new RecordSaveException($this->translate($e->getMessage()), [[
         'name' => 'Trip.' . $e->field,
         'id' => (int) ($record['id'] ?? -1),
       ]], $e);

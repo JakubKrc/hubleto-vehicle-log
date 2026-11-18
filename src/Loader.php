@@ -35,6 +35,19 @@ class Loader extends \Hubleto\Erp\App
     }
   }
 
+  public function renderSecondSidebar(): string
+  {
+    return '
+      ' . $this->secondSidebarTitle() . '
+      <div class="app-sidebar-buttons">
+        ' . $this->secondSidebarButton('vehicle-log', 'fas fa-route', 'Trips') . '
+        ' . $this->secondSidebarButton('vehicle-log/vehicles', 'fas fa-car', 'Vehicles') . '
+        ' . $this->secondSidebarButton('vehicle-log/bookings', 'fas fa-calendar-check', 'Bookings') . '
+        ' . $this->secondSidebarButton('calendar?show=vehicle-log-bookings', 'fas fa-calendar-days', 'Calendar') . '
+      </div>
+    ';
+  }
+
   public function renderFrontendAssets(): string
   {
     $css = (string) file_get_contents($this->srcFolder . '/Assets/vehicle-log.css');

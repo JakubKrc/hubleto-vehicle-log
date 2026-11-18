@@ -28,6 +28,12 @@ class AppMenu extends \Hubleto\Framework\Extendible
         'title' => $this->app->translate('Bookings'),
         'icon' => 'fas fa-calendar-check',
       ],
+      [
+        'app' => $this->app,
+        'url' => 'calendar?show=vehicle-log-bookings',
+        'title' => $this->app->translate('Calendar'),
+        'icon' => 'fas fa-calendar-days',
+      ],
     ];
   }
 }

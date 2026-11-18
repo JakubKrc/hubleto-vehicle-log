@@ -99,10 +99,10 @@ class Booking extends \Hubleto\Erp\Model
   // A save may send only some columns; the checks need the vehicle, dates and times, so the stored ones are used.
   private function addStoredValues(array $record): array
   {
-    $storedBooking = $this->record->where('id', (int) ($record['id'] ?? 0))->first();
+    $storedBooking = $this->record->where('id', (int) ($record['id'] ?? 0))->lockForUpdate()->first();
     if (!$storedBooking) return $record;
 
-    foreach (['id_vehicle', 'date_start', 'time_start', 'date_end', 'time_end'] as $column) {
+    foreach (['id_vehicle', 'name', 'date_start', 'time_start', 'date_end', 'time_end'] as $column) {
       if (!array_key_exists($column, $record)) $record[$column] = $storedBooking->$column;
     }
     return $record;
@@ -169,6 +169,7 @@ class Booking extends \Hubleto\Erp\Model
       ->where($this->table . '.id', '<>', (int) ($record['id'] ?? 0))
       ->whereRaw($storedStartSql . ' < ?', [$this->getEnd($record)])
       ->whereRaw($storedEndSql . ' > ?', [$this->getStart($record)])
+      ->lockForUpdate()
       ->with('DRIVER')
       ->first()
     ;

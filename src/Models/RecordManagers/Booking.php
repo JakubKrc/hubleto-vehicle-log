@@ -9,6 +9,39 @@ class Booking extends \Hubleto\Erp\RecordManager
 {
   public $table = 'vehicle_log_bookings';
 
+  public function recordCreate(array $record, $useProvidedRecordId = false): array
+  {
+    return $this->withLockedVehicles($record, fn(): array => parent::recordCreate($record, $useProvidedRecordId));
+  }
+
+  public function recordUpdate(array $record, array $originalRecord = []): array
+  {
+    if ((int) ($record['id'] ?? 0) <= 0) return [];
+    return $this->withLockedVehicles($record, fn(): array => parent::recordUpdate($record, $originalRecord));
+  }
+
+  private function withLockedVehicles(array $record, \Closure $save): array
+  {
+    $connection = $this->getConnection();
+
+    return $connection->transaction(function () use ($record, $save, $connection): array {
+      $stored = null;
+      if ((int) ($record['id'] ?? 0) > 0) {
+        $stored = $this->newQuery()->whereKey((int) $record['id'])->lockForUpdate()->first();
+      }
+
+      $vehicleIds = array_unique(array_filter([
+        (int) ($stored?->id_vehicle ?? 0),
+        (int) ($record['id_vehicle'] ?? $stored?->id_vehicle ?? 0),
+      ], fn(int $id): bool => $id > 0));
+
+      $connection->table((new Vehicle())->getTable())
+        ->whereIn('id', $vehicleIds)->orderBy('id')->lockForUpdate()->get();
+
+      return $save();
+    }, 3);
+  }
+
   public function VEHICLE(): BelongsTo
   {
     return $this->belongsTo(Vehicle::class, 'id_vehicle', 'id');
